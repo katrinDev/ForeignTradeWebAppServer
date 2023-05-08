@@ -1,4 +1,4 @@
-package com.company.foreignTradeOperationsWebApp.secutiry.payloads.response;
+package com.company.foreignTradeOperationsWebApp.payloads.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

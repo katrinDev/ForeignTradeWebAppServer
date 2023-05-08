@@ -1,10 +1,7 @@
 package com.company.foreignTradeOperationsWebApp.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "username")},
         schema = "foreign-trade-operations")
+@ToString
 public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -40,6 +38,11 @@ public class UserEntity {
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private transient Set<TradeOperationEntity> operations = new HashSet<>();
+
+    public UserEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public UserEntity(String username, String password, RoleEntity role, PersonEntity person) {
         this.username = username;

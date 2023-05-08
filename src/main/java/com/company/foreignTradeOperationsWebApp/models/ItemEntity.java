@@ -4,6 +4,7 @@ import com.company.foreignTradeOperationsWebApp.models.enums.TradeType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Objects;

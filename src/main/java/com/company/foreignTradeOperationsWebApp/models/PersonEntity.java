@@ -3,6 +3,7 @@ package com.company.foreignTradeOperationsWebApp.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "person", schema = "foreign-trade-operations")
+@ToString
 public class PersonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

@@ -2,10 +2,7 @@ package com.company.foreignTradeOperationsWebApp.models;
 
 import com.company.foreignTradeOperationsWebApp.models.enums.RoleEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "role", schema = "foreign-trade-operations")
+@ToString
 public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -28,7 +26,6 @@ public class RoleEntity {
 
     @OneToMany (mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private transient List<UserEntity> users;
-
 
     @Override
     public boolean equals(Object o) {

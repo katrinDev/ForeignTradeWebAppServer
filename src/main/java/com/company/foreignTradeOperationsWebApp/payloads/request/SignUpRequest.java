@@ -1,9 +1,6 @@
-package com.company.foreignTradeOperationsWebApp.secutiry.payloads.request;
+package com.company.foreignTradeOperationsWebApp.payloads.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +10,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class SignUpRequest {
     @NotBlank
     @Size(min = 3, max = 20)
