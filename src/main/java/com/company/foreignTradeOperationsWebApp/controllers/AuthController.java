@@ -47,21 +47,28 @@ public class AuthController {
 
         UserEntity currentUser = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
 
+        MessageResponse responseMessage = new MessageResponse();
+
         if(currentUser != null){
             if(!HashUtils.verifyPassword(currentUser.getPassword(), loginRequest.getPassword())){
-
-                System.out.println("Heeey");
-                return new ResponseEntity<>(new MessageResponse("Некорректный пароль!"), HttpStatus.BAD_REQUEST);
+                responseMessage.setMessage("Некорректный пароль!");
             } else {
                 return new ResponseEntity<>(currentUser, HttpStatus.OK);
             }
         } else {
-            return new ResponseEntity<>(new MessageResponse("Пользователя с таким логином не существует!"), HttpStatus.BAD_REQUEST);
+            responseMessage.setMessage("Пользователя с таким логином не существует!");
         }
+
+        return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        if (signUpRequest == null){
+            return new ResponseEntity<>(new MessageResponse("Некорректное тело запроса!"), HttpStatus.BAD_REQUEST);
+        }
+
+        System.out.println(signUpRequest);
         if (!personRepository.existsByWorkEmail(signUpRequest.getWorkEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -69,9 +76,7 @@ public class AuthController {
         }
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Ошибка: Пользователь с данным логином существует!"));
+            return new ResponseEntity<>(new MessageResponse("Ошибка: Пользователь с данным логином существует!"), HttpStatus.BAD_REQUEST);
         }
 
         // Create new user's account
