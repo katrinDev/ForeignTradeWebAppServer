@@ -1,6 +1,6 @@
 package com.company.foreignTradeOperationsWebApp.models.enums;
 
-public enum TradeType {
+public enum TradeTypeEnum {
     IMPORT,
     EXPORT
 }

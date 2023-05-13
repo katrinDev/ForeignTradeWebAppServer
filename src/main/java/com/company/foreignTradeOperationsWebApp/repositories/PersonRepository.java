@@ -10,5 +10,5 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
 
     Boolean existsByNameAndSurnameAndPatronymic(String name, String surname, String patronymic);
 
-    Optional<PersonEntity> findByWorkEmail(String email);
+    PersonEntity findByWorkEmail(String email);
 }

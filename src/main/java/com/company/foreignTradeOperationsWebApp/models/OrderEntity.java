@@ -2,6 +2,7 @@ package com.company.foreignTradeOperationsWebApp.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "order_", schema = "foreign-trade-operations")
+@NoArgsConstructor
 public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

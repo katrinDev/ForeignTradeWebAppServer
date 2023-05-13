@@ -1,10 +1,10 @@
 package com.company.foreignTradeOperationsWebApp.models;
 
-import com.company.foreignTradeOperationsWebApp.models.enums.TradeType;
+import com.company.foreignTradeOperationsWebApp.models.enums.TradeTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "company", schema = "foreign-trade-operations")
+@NoArgsConstructor
 public class CompanyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -35,9 +36,10 @@ public class CompanyEntity {
     @Column( nullable = true, length = 45)
     private String companyEmail;
 
-    @Enumerated(EnumType.STRING)
-    @Column( nullable = false, length = 45)
-    private TradeType companyType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="trade_type_id")
+    private TradeTypeEntity companyType;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private transient List<TradeOperationEntity> operations;

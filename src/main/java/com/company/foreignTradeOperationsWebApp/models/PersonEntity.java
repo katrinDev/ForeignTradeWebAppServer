@@ -2,6 +2,7 @@ package com.company.foreignTradeOperationsWebApp.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Setter
 @Table(name = "person", schema = "foreign-trade-operations")
 @ToString
+@NoArgsConstructor
 public class PersonEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

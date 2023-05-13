@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -50,7 +51,7 @@ public class PersonController {
             return new ResponseEntity<>(new MessageResponse("Некорректное тело запроса!"), HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(employee);
+        System.out.println("New employee: " + employee);
 
         if (personRepository.existsByWorkEmail(employee.getWorkEmail())) {
             return new ResponseEntity<>(new MessageResponse("Ошибка: Данная почта уже привязана к другому сотруднику!"), HttpStatus.BAD_REQUEST);
@@ -59,7 +60,7 @@ public class PersonController {
         PersonEntity newEmployee = new PersonEntity(employee.getSurname(), employee.getName(), employee.getPatronymic(), employee.getWorkEmail());
         personRepository.save(newEmployee);
 
-        return ResponseEntity.ok(new MessageResponse("Сотрудник успешно добавлен в систему!"));
+        return ResponseEntity.ok(employee);
     }
 
     @PutMapping (value = "")
@@ -70,13 +71,16 @@ public class PersonController {
         }
 
         try{
-
-            PersonEntity updatingEmployee = personRepository.findById(employee.getPersonId()).orElse(null);
-            if(updatingEmployee == null){
-                throw new Exception();
+            if(personRepository.findById(employee.getPersonId()).orElse(null) == null){
+                return new ResponseEntity<>(new MessageResponse("Данного сотрудника нет в системе!"), HttpStatus.NOT_FOUND);
             }
 
-            personRepository.save(updatingEmployee);
+            if (personRepository.existsByWorkEmail(employee.getWorkEmail()) &&
+                    !Objects.equals((personRepository.findByWorkEmail(employee.getWorkEmail())).getPersonId(), employee.getPersonId())) {
+                return new ResponseEntity<>(new MessageResponse("Ошибка: Данная почта уже привязана к другому сотруднику!"), HttpStatus.BAD_REQUEST);
+            }
+
+            personRepository.save(employee);
             System.out.println("Employee was updated: " + employee);
         } catch(Exception e) {
             System.out.println(e.getMessage());

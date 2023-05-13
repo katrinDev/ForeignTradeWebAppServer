@@ -24,6 +24,7 @@ public class UserEntity {
     @Basic
     @Column (name = "username", nullable = false, length = 45)
     private String username;
+
     @Basic
     @Column (name = "password", nullable = false, length = 200)
     private String password;
