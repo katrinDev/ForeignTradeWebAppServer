@@ -38,6 +38,13 @@ public class PersonEntity {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private transient List<UserEntity> users;
 
+    public PersonEntity(String surname, String name, String patronymic, String workEmail) {
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.workEmail = workEmail;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

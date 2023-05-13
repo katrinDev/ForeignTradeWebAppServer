@@ -56,7 +56,7 @@ public class AuthController {
                 return new ResponseEntity<>(currentUser, HttpStatus.OK);
             }
         } else {
-            responseMessage.setMessage("Пользователя с таким логином не существует!");
+            responseMessage.setMessage("Пользователь с таким логином уже существует!");
         }
 
         return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
@@ -72,16 +72,16 @@ public class AuthController {
         if (!personRepository.existsByWorkEmail(signUpRequest.getWorkEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Ошибка: Данного сотрудника нет в системе!"));
+                    .body(new MessageResponse("Ошибка: Сотрудника с данной почтой нет в системе!"));
         }
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new MessageResponse("Ошибка: Пользователь с данным логином существует!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("Ошибка: Пользователя с данным логином не существует!"), HttpStatus.BAD_REQUEST);
         }
 
         // Create new user's account
         UserEntity user = new UserEntity(signUpRequest.getUsername(), HashUtils.sha256(signUpRequest.getPassword()),
-                roleRepository.findByRoleName(RoleEnum.ROLE_USER), personRepository.findByWorkEmail(signUpRequest.getWorkEmail()));
+                roleRepository.findByRoleName(RoleEnum.USER), personRepository.findByWorkEmail(signUpRequest.getWorkEmail()).orElse(null));
 
         userRepository.save(user);
 

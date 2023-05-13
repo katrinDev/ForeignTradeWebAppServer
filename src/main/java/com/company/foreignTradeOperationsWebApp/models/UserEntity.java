@@ -63,4 +63,6 @@ public class UserEntity {
     public int hashCode() {
         return Objects.hash(userId, username, password, role, person);
     }
+
+
 }

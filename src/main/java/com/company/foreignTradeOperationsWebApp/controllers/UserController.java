@@ -1,10 +1,13 @@
 package com.company.foreignTradeOperationsWebApp.controllers;
 
+import com.company.foreignTradeOperationsWebApp.models.RoleEntity;
 import com.company.foreignTradeOperationsWebApp.models.UserEntity;
+
 import com.company.foreignTradeOperationsWebApp.payloads.response.MessageResponse;
 import com.company.foreignTradeOperationsWebApp.repositories.PersonRepository;
 import com.company.foreignTradeOperationsWebApp.repositories.RoleRepository;
 import com.company.foreignTradeOperationsWebApp.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +40,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<UserEntity> deleteUser(@PathVariable("id") Long id){
         UserEntity user = userRepository.findByUserId(id).orElse(null);
@@ -44,8 +48,8 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userRepository.delete(user);
-
+        userRepository.deleteByUserId(id);
+        System.out.println("User to be deleted: " + user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -56,9 +60,21 @@ public class UserController {
             return new ResponseEntity<>(new MessageResponse("Некорректное тело запроса!"), HttpStatus.BAD_REQUEST);
         }
 
-        userRepository.save(user);
+        try{
+            System.out.println(user);
+
+            UserEntity updatingUser = userRepository.findByUserId(user.getUserId()).orElse(null);
+            if(updatingUser == null){
+                throw new Exception();
+            }
+            updatingUser.setRole(roleRepository.findByRoleName(user.getRole().getRoleName()));
+
+            userRepository.save(updatingUser);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new MessageResponse("Не удалось изменить пользователя!"), HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 }
