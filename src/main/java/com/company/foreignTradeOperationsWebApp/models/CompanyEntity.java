@@ -1,6 +1,5 @@
 package com.company.foreignTradeOperationsWebApp.models;
 
-import com.company.foreignTradeOperationsWebApp.models.enums.TradeTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,7 @@ public class CompanyEntity {
 
     @Basic
     @Column(nullable = false, length = 45)
-    private String country;
+    private Object country;
 
     @Basic
     @Column( nullable = false, length = 45)
@@ -36,10 +35,26 @@ public class CompanyEntity {
     @Column( nullable = true, length = 45)
     private String companyEmail;
 
+    public CompanyEntity(String companyName, Object country, String checkingAccount, String companyEmail, TradeTypeEntity tradeType) {
+        this.companyName = companyName;
+        this.country = country;
+        this.checkingAccount = checkingAccount;
+        this.companyEmail = companyEmail;
+        this.tradeType = tradeType;
+    }
+
+    public CompanyEntity(Long companyId, String companyName, Object country, String checkingAccount, String companyEmail, TradeTypeEntity tradeType) {
+        this.companyId = companyId;
+        this.companyName = companyName;
+        this.country = country;
+        this.checkingAccount = checkingAccount;
+        this.companyEmail = companyEmail;
+        this.tradeType = tradeType;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="trade_type_id")
-    private TradeTypeEntity companyType;
+    @JoinColumn(name="trade_type_id", nullable = false)
+    private TradeTypeEntity tradeType;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private transient List<TradeOperationEntity> operations;

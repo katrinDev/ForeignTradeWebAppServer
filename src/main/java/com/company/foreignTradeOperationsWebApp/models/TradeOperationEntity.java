@@ -1,6 +1,5 @@
 package com.company.foreignTradeOperationsWebApp.models;
 
-import com.company.foreignTradeOperationsWebApp.models.enums.TradeTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,8 +38,8 @@ public class TradeOperationEntity {
     private transient List<OrderEntity> orders;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="trade_type_id")
-    private TradeTypeEntity operationType;
+    @JoinColumn(name="trade_type_id", nullable = false)
+    private TradeTypeEntity tradeType;
 
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     @JoinTable(
@@ -57,19 +56,19 @@ public class TradeOperationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TradeOperationEntity that = (TradeOperationEntity) o;
-        return Objects.equals(operationId, that.operationId) && Objects.equals(operationType, that.operationType) && Objects.equals(fullCost, that.fullCost) && Objects.equals(supplyDate, that.supplyDate);
+        return Objects.equals(operationId, that.operationId) && Objects.equals(tradeType, that.tradeType) && Objects.equals(fullCost, that.fullCost) && Objects.equals(supplyDate, that.supplyDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(operationId, operationType, fullCost, supplyDate);
+        return Objects.hash(operationId, tradeType, fullCost, supplyDate);
     }
 
     @Override
     public String toString() {
         return "TradeOperation{" +
                 "operationId=" + operationId +
-                ", operationType='" + operationType + '\'' +
+                ", operationType='" + tradeType + '\'' +
                 ", fullCost=" + fullCost +
                 ", supplyDate=" + supplyDate +
                 ", company=" + company +

@@ -1,9 +1,10 @@
 package com.company.foreignTradeOperationsWebApp.controllers;
 
 import com.company.foreignTradeOperationsWebApp.models.ItemEntity;
-import com.company.foreignTradeOperationsWebApp.models.PersonEntity;
+import com.company.foreignTradeOperationsWebApp.models.TradeTypeEntity;
 import com.company.foreignTradeOperationsWebApp.payloads.response.MessageResponse;
 import com.company.foreignTradeOperationsWebApp.repositories.ItemRepository;
+import com.company.foreignTradeOperationsWebApp.repositories.TrendTypeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ import java.util.Objects;
 public class ItemController {
     @Autowired
     ItemRepository itemRepository;
+
+    @Autowired
+    TrendTypeRepository trendTypeRepository;
 
     @GetMapping("")
     public ResponseEntity<List<ItemEntity>> getAllItems(){
@@ -45,7 +49,6 @@ public class ItemController {
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
-
     @PostMapping("")
     public ResponseEntity<?> addItem(@RequestBody ItemEntity item) {
         if (item == null){
@@ -58,7 +61,8 @@ public class ItemController {
             return new ResponseEntity<>(new MessageResponse("Ошибка: Такой товар уже существует!"), HttpStatus.BAD_REQUEST);
         }
 
-        ItemEntity newItem = new ItemEntity(item.getItemName(), item.getItemCost(), item.getItemType());
+        TradeTypeEntity tradeTypeEntity = trendTypeRepository.findByTradeTypeName(item.getTradeType().getTradeTypeName());
+        ItemEntity newItem = new ItemEntity(item.getItemName(), item.getItemCost(), tradeTypeEntity);
         itemRepository.save(newItem);
 
         return ResponseEntity.ok(newItem);
@@ -67,6 +71,7 @@ public class ItemController {
     @PutMapping (value = "")
     public ResponseEntity<?> updateItem(@RequestBody ItemEntity item) {
 
+        System.out.println("body" + item);
         if (item == null){
             return new ResponseEntity<>(new MessageResponse("Некорректное тело запроса!"), HttpStatus.BAD_REQUEST);
         }
@@ -81,8 +86,10 @@ public class ItemController {
                 return new ResponseEntity<>(new MessageResponse("Ошибка: Товар с данным именем уже существует!"), HttpStatus.BAD_REQUEST);
             }
 
-            itemRepository.save(item);
-            System.out.println("Item was updated: " + item);
+            TradeTypeEntity tradeTypeEntity = trendTypeRepository.findByTradeTypeName(item.getTradeType().getTradeTypeName());
+            ItemEntity updatedItem = new ItemEntity(item.getItemId(), item.getItemName(), item.getItemCost(), tradeTypeEntity);
+            itemRepository.save(updatedItem);
+            System.out.println("Item was updated: " + updatedItem);
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(new MessageResponse("Не удалось изменить данные товара!"), HttpStatus.NOT_FOUND);

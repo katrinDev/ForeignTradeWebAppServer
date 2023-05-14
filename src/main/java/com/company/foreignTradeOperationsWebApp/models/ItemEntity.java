@@ -1,6 +1,5 @@
 package com.company.foreignTradeOperationsWebApp.models;
 
-import com.company.foreignTradeOperationsWebApp.models.enums.TradeTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,24 +18,33 @@ public class ItemEntity {
     @Id
     @Column(name = "item_id", nullable = false)
     private Long itemId;
+
     @Basic
     @Column( nullable = false, length = 45)
     private String itemName;
+
     @Basic
     @Column( nullable = false, precision = 0)
     private double itemCost;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="trade_type_id")
-    private TradeTypeEntity itemType;
+    @JoinColumn(name="trade_type_id", nullable = false)
+    private TradeTypeEntity tradeType;
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private transient List<OrderEntity> orders;
 
-    public ItemEntity(String itemName, double itemCost, TradeTypeEntity itemType) {
+    public ItemEntity(String itemName, double itemCost, TradeTypeEntity tradeType) {
         this.itemName = itemName;
         this.itemCost = itemCost;
-        this.itemType = itemType;
+        this.tradeType = tradeType;
+    }
+
+    public ItemEntity(Long itemId, String itemName, double itemCost, TradeTypeEntity tradeType) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.itemCost = itemCost;
+        this.tradeType = tradeType;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class ItemEntity {
                 "itemId=" + itemId +
                 ", itemName='" + itemName + '\'' +
                 ", itemCost=" + itemCost +
-                ", itemType='" + itemType + '\'' +
+                ", itemType='" + tradeType + '\'' +
                 '}';
     }
 
