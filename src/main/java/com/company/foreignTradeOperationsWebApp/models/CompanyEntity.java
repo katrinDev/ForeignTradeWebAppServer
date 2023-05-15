@@ -74,13 +74,13 @@ public class CompanyEntity {
 
     @Override
     public String toString() {
-        return "Company{" +
+        return "CompanyEntity{" +
                 "companyId=" + companyId +
                 ", companyName='" + companyName + '\'' +
-                ", country='" + country + '\'' +
+                ", country=" + country +
                 ", checkingAccount='" + checkingAccount + '\'' +
                 ", companyEmail='" + companyEmail + '\'' +
-                ", operations=" + operations +
+                ", tradeType=" + tradeType +
                 '}';
     }
 }

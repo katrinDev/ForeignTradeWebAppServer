@@ -31,6 +31,11 @@ public class OrderEntity {
     @JoinColumn(name="operation_id")
     private TradeOperationEntity operation;
 
+    public OrderEntity(int itemsAmount, ItemEntity item) {
+        this.itemsAmount = itemsAmount;
+        this.item = item;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

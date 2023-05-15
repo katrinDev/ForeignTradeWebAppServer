@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Entity
@@ -28,7 +25,7 @@ public class TradeOperationEntity {
 
     @Basic
     @Column( nullable = false)
-    private String supplyDate;
+    private Date supplyDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="company_id")
@@ -47,9 +44,23 @@ public class TradeOperationEntity {
             joinColumns = { @JoinColumn(name = "operation_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-
     private Set<UserEntity> users = new HashSet<>();
 
+    public TradeOperationEntity(Date supplyDate, CompanyEntity company, TradeTypeEntity tradeType) {
+        this.supplyDate = supplyDate;
+        this.company = company;
+        this.tradeType = tradeType;
+    }
+
+    public boolean addUser(UserEntity user) {
+        try{
+            users.add(user);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public boolean equals(Object o) {

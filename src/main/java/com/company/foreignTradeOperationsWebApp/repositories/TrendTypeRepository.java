@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TrendTypeRepository extends JpaRepository<TradeTypeEntity, Long> {
     TradeTypeEntity findByTradeTypeName(TradeTypeEnum tradeTypeName);
+    TradeTypeEntity findByTradeTypeId(Long id);
 }
